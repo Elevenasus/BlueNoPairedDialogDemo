@@ -53,7 +53,6 @@ public class ClsUtils {
             // throw new RuntimeException(e.getMessage());
             e.printStackTrace();
         }catch (Exception e){
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return true;
@@ -72,7 +71,6 @@ public class ClsUtils {
 
 
     // 取消配对
-
     static public boolean cancelBondProcess(Class<?> btClass, BluetoothDevice device) throws Exception{
         Method createBondMethod = btClass.getMethod("cancelBondProcess");
         Boolean returnValue = (Boolean) createBondMethod.invoke(device);
@@ -93,7 +91,6 @@ public class ClsUtils {
      */
 
     static public void printAllInform(Class clsShow){
-
         try{
             // 取得所有方法
             Method[] hideMethod = clsShow.getMethods();

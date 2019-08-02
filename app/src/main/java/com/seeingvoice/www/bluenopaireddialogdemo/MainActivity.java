@@ -7,6 +7,8 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -20,7 +22,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int MY_PERMISSIONS_REQUEST_COARSE_LOCATION = 230;
     /** Called when the activity is first created. */
     private Button autopairbtn = null;
-    private BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+    private BluetoothManager mBluetoothManager = null;
+//    private BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+    private BluetoothAdapter bluetoothAdapter = null;
 
 
     @Override
@@ -29,7 +33,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         autopairbtn = findViewById(R.id.button1);
         autopairbtn.setOnClickListener(this);
+        initBluetoothAdapter();
         requestPermission();
+    }
+
+    //初始化蓝牙适配器
+    private void initBluetoothAdapter() {
+        mBluetoothManager = (BluetoothManager) getApplicationContext().getSystemService(Context.BLUETOOTH_SERVICE);
+        assert mBluetoothManager != null;
+        bluetoothAdapter = mBluetoothManager.getAdapter();
     }
 
     //设置按钮的监听方法

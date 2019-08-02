@@ -12,7 +12,7 @@ import android.util.Log;
  * auther:zyy
  */
 public class BluetoothReceiver extends BroadcastReceiver {
-    String pin = "1234";  //此处为你要连接的蓝牙设备的初始密钥，一般为1234或0000
+    String pin = "0000";  //此处为你要连接的蓝牙设备的初始密钥，一般为1234或0000,我们是0000
     public BluetoothReceiver() {
     }
 
@@ -21,7 +21,6 @@ public class BluetoothReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         String action = intent.getAction(); //得到action
-        Log.e("action1=", action);
         BluetoothDevice btDevice = null;  //创建一个蓝牙device对象
         // 从Intent中获取设备对象
         btDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
@@ -31,23 +30,20 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
             if(btDevice.getName().contains("SV-H1")){//SV-H1设备如果有多个，第一个搜到的那个会被尝试。
                 if (btDevice.getBondState() == BluetoothDevice.BOND_NONE) {
-
                     Log.e("ywq", "attemp to bond:"+"["+btDevice.getName()+"]");
                     try {
                         //通过工具类ClsUtils,调用createBond方法
                         ClsUtils.createBond(btDevice.getClass(), btDevice);
                     } catch (Exception e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
                 }
+                //如果见声耳机已经配对，可以尝试连接媒体音频和手机音频
             }else
+                //没有找到见声耳机
                 Log.e("error", "Is faild");
         }else if(action.equals("android.bluetooth.device.action.PAIRING_REQUEST")) {//再次得到的action，会等于PAIRING_REQUEST
-            Log.e("action2=", action);
-            if(btDevice.getName().contains("SV-H1"))
-            {
-                Log.e("here", "OKOKOK");
+            if(btDevice.getName().contains("SV-H1")){
                 try {
                     //1.确认配对
                     ClsUtils.setPairingConfirmation(btDevice.getClass(), btDevice, true);
@@ -57,7 +53,6 @@ public class BluetoothReceiver extends BroadcastReceiver {
                     //3.调用setPin方法进行配对...
                     boolean ret = ClsUtils.setPin(btDevice.getClass(), btDevice, pin);
                 } catch (Exception e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }else
